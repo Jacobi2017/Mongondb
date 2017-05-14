@@ -1,0 +1,56 @@
+1.先从官网下载mongodb 地址：https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-3.4.4.tgz
+解压 tar zxvf mongodb-linux-x86_64-amazon-3.4.4.tgz 
+然后进入 mongodb 创建 mkdir db 和logs
+cd mongodb
+mkdir db
+mkdir logs
+cd bin
+vi mongodb.conf  通过vi 编辑mongodb.conf 
+“dbpath=/usr/local/mongodb/db
+logpath=/usr/local/mongodb/logs/mongodb.log
+port=27017
+fork=true
+nohttpinterface=true”
+开机自动启动mongodb
+vi /etc/rc.d/rc.local
+/usr/local/mongodb/bin/mongod --config /usr/local/mongodb/bin/mongodb.conf
+[root@192 bin]# ./mongod  -f /home/loading software/mongodb/bin/mongodb.conf
+会出现 下面 child process started successfully, parent exiting 就算成功
+配置系统服务  “先在/etc/rc.d/init.d下用vi 新建文件 mongod
+
+内容如下：
+
+#!/bin/bash
+#
+#chkconfig: 2345 80 90
+#description: mongodb
+start() {
+ /home/loading/mongodb/bin/mongod --config /home/loading/mongodb/bin/mongodb.conf
+}
+
+stop() {
+   /home/loading/mongodb/bin/mongod --config /usr/mongodb/bin/mongodb.conf --shutdown
+}
+
+case "$1" in
+  start)
+ start
+ ;;
+  
+stop)
+ stop
+ ;;
+  
+restart)
+ stop
+ start
+ ;;
+  *)
+ echo 
+$"Usage: $0 {start|stop|restart}"
+ exit 1
+esac
+[root@192 bin]# ps -ef|grep mongodb
+root       3362      1  1 May14 ?        00:03:43 ./bin/mongod -f /home/loading/mongodb/bin/mongodb.conf
+root       4815   4658  0 02:42 pts/1    00:00:00 grep mongodb
+上面是mongodb 进程，下面是系统服务名称及创建时间
