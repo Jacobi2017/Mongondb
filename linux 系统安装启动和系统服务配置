@@ -54,3 +54,8 @@ esac
 root       3362      1  1 May14 ?        00:03:43 ./bin/mongod -f /home/loading/mongodb/bin/mongodb.conf
 root       4815   4658  0 02:42 pts/1    00:00:00 grep mongodb
 上面是mongodb 进程，下面是系统服务名称及创建时间
+现在如果想通过 系统服务启动 mongod 必须先关闭原先的service mongod stop 然后再通过 service mongod stop启动，否则会报错
+”about to fork child process, waiting until server is ready for connections.
+forked process: 4876
+ERROR: child process failed, exited with error number 100“
+
